@@ -25,6 +25,8 @@ RUN apt update && apt install -y \
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cargo install cargo-binutils
+# 红温RA
+RUN rustup toolchain add nightly-2024-09-04-aarch64-unknown-linux-gnu
 
 # 安装 musl toolchains
 WORKDIR /opt/musl
