@@ -12,7 +12,8 @@ make pflash_img
 make disk_img
 
 make payload
-./update_disk.sh payload/mapfile_c/mapfile
+# ./update_disk.sh payload/mapfile_c/mapfile
+./update_disk_mtools.sh payload/mapfile_c/mapfile
 
 make run A=exercises/sys_map/ BLK=y | tee $tmp_file
 

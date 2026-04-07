@@ -31,6 +31,8 @@ ARCH ?= riscv64
 PLATFORM ?=
 SMP ?= 1
 MODE ?= release
+# 配合sys_writev食用可喜提panic
+# MODE ?= debug
 LOG ?= warn
 V ?=
 
@@ -180,8 +182,10 @@ debug: build
 	$(call run_qemu_debug) &
 	sleep 1
 	$(GDB) $(OUT_ELF) \
+# 	  -ex 'set pagination off' \
 	  -ex 'target remote localhost:1234' \
-	  -ex 'b rust_entry' \
+    -ex 'b rust_entry' \
+# 	  -ex 'b main' \
 	  -ex 'continue' \
 	  -ex 'disp /16i $$pc'
 

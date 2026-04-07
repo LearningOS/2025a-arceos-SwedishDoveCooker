@@ -22,3 +22,4 @@ Cargo.lock
 
 .devcontainer
 .gdb_history
+arceos/update_disk_mtools.sh
