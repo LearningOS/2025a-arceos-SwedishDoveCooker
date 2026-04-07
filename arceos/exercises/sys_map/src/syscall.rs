@@ -164,7 +164,7 @@ fn sys_mmap(
         .find_free_area(
             (addr as usize).into(),
             length.align_up_4k(),
-            VirtAddrRange::from_start_size(0.into(), usize::MAX.into()),
+            VirtAddrRange::from_start_size(0x1_000_000_000.into(), 0x2_000_000_000),
         )
         .ok_or_else(|| {
             ax_println!("No free area for mmap with length {length}");
@@ -177,8 +177,11 @@ fn sys_mmap(
             ax_println!("Failed to map area for mmap: {e}");
             panic!();
         });
-    let (paddr, _, _) = aspace.page_table().query(space).unwrap();
-    sys_read(fd, phys_to_virt(paddr).as_mut_ptr_of(), length)
+    if !flags.contains(MmapFlags::MAP_ANONYMOUS) {
+        let (paddr, _, _) = aspace.page_table().query(space).unwrap();
+        sys_read(fd, phys_to_virt(paddr).as_mut_ptr_of(), length);
+    }
+    space.as_usize() as isize
 }
 
 fn sys_openat(dfd: c_int, fname: *const c_char, flags: c_int, mode: api::ctypes::mode_t) -> isize {
